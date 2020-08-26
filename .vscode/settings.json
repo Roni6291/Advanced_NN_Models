@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "C:\\Users\\roni\\Anaconda3\\envs\\pytorchenv\\python.exe",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.pycodestyleEnabled": false
+}
