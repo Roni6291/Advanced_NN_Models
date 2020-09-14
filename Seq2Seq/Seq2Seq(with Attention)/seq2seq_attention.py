@@ -95,7 +95,7 @@ class Decoder(nn.Module):
 
         sequence_length = encoder_states.shape[0]
         h_reshaped = hidden.repeat(sequence_length, 1, 1)
-        # h_reshaped: (seq_length, N, hidden_size*2)
+        # h_reshaped: (seq_length, N, hidden_size)
 
         energy = self.relu(self.energy(torch.cat((h_reshaped, encoder_states),
                                                  dim=2)))
@@ -113,11 +113,11 @@ class Decoder(nn.Module):
         lstm_input = torch.cat((context_vector, embedding), dim=2)
         # rnn_input: (1, N, hidden_size*2 + embedding_size)
 
-        outputs, (hidden, cell) = self.rnn(lstm_input, (hidden, cell))
+        outputs, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
         # outputs shape: (1, N, hidden_size)
 
         predictions = self.fc(outputs).squeeze(0)
-        # predictions: (N, hidden_size)
+        # predictions: (N, output_size)
 
         return predictions, hidden, cell
 
@@ -160,7 +160,7 @@ class Seq2Seq(nn.Module):
             x = target[t] if random.random(
             ) < teacher_force_ratio else best_guess
 
-        return outputs
+        return outputs  # target_len, batch_size, target_vocab_size
 
 
 # We're ready to define everything we need for training our Seq2Seq model ###
